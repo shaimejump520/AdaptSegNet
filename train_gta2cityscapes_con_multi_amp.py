@@ -657,6 +657,10 @@ def main():
             total_loss_adv_target_value1 = []
             total_loss_D_value1 = []
             total_loss_con_value1 = []
+            total_loss_seg_value2 = []
+            total_loss_adv_target_value2 = []
+            total_loss_D_value2 = []
+            total_loss_con_value2 = []
             
             fig = plt.figure(figsize=(15, 15))
 
