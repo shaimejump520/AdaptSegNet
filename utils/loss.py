@@ -6,9 +6,10 @@ from torch.autograd import Variable
 
 class CrossEntropy2d(nn.Module):
 
-    def __init__(self, size_average=True, ignore_label=255):
+    def __init__(self, size_average=None, reduction='mean', ignore_label=255):
         super(CrossEntropy2d, self).__init__()
         self.size_average = size_average
+        self.reduction = reduction
         self.ignore_label = ignore_label
 
     def forward(self, predict, target, weight=None):
@@ -32,5 +33,6 @@ class CrossEntropy2d(nn.Module):
             return Variable(torch.zeros(1))
         predict = predict.transpose(1, 2).transpose(2, 3).contiguous()
         predict = predict[target_mask.view(n, h, w, 1).repeat(1, 1, 1, c)].view(-1, c)
-        loss = F.cross_entropy(predict, target, weight=weight, size_average=self.size_average)
+        loss = F.cross_entropy(predict, target, weight=weight, size_average=self.size_average, 
+                               reduction=self.reduction)
         return loss
