@@ -781,7 +781,12 @@ def main():
             writer['test'].add_scalar('log/mIoU',      mIoU          , i_iter)
             
             hist = np.zeros((num_cls, num_cls))
-
+            
+            if max_mIoU < mIoU:
+                max_mIoU = mIoU
+                torch.save(model.state_dict(), osp.join(args.snapshot_dir,    'GTA5_' + 'best_iter' + '.pth'))
+                torch.save(model_D1.state_dict(), osp.join(args.snapshot_dir, 'GTA5_' + 'best_iter' + '_D1.pth'))
+                torch.save(model_D2.state_dict(), osp.join(args.snapshot_dir, 'GTA5_' + 'best_iter' + '_D2.pth'))
             
         if i_iter >= args.num_steps_stop - 1:
             print('save model ...')
@@ -790,12 +795,6 @@ def main():
             torch.save(model_D2.state_dict(), osp.join(args.snapshot_dir, 'GTA5_' + str(args.num_steps_stop) + '_D2.pth'))
             break
 
-        if max_mIoU < mIoU:
-            max_mIoU = mIoU
-            torch.save(model.state_dict(), osp.join(args.snapshot_dir,    'GTA5_' + 'best_iter' + '.pth'))
-            torch.save(model_D1.state_dict(), osp.join(args.snapshot_dir, 'GTA5_' + 'best_iter' + '_D1.pth'))
-            torch.save(model_D2.state_dict(), osp.join(args.snapshot_dir, 'GTA5_' + 'best_iter' + '_D2.pth'))
-            
 #         if i_iter % args.save_pred_every == 0 and i_iter != 0:
 #             print('taking snapshot ...')
 #             torch.save(model.state_dict(), osp.join(args.snapshot_dir, 'GTA5_' + str(i_iter) + '.pth'))
